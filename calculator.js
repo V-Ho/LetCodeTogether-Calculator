@@ -17,35 +17,32 @@ const divide = (x, y) => {
 
 const displayVal = document.getElementById('displayVal')
 
+let display = ''
 let valOne
 let valTwo
 let symbol
-let calcArray = []
 
-const emptyCalcArray = () => {
-  calcArray.length = 0
+const numClick = document.getElementsByClassName('btnNum')
+for (let arg of numClick) {
+  arg.addEventListener('click', () => {
+    display += arg.innerHTML
+    displayVal.innerHTML = display
+  })
 }
 
 const operatorClick = document.getElementsByClassName('btnOperator')
 for (let arg of operatorClick) {
   arg.addEventListener('click', () => {
+    valOne = parseInt(display)
+    console.log('VAL1', valOne)
     symbol = arg.innerHTML
-  })
-}
-
-const numClick = document.getElementsByClassName('btnNum')
-for (let arg of numClick) {
-  arg.addEventListener('click', () => {
-    displayVal.innerHTML = arg.innerHTML
-    calcArray.push(arg.innerHTML)
-    console.log('ARRAY', calcArray)
-    valOne = calcArray[0]
-    valTwo = calcArray[1]
+    display = ''
   })
 }
 
 const evaluate = document.querySelector('#itemg')
 evaluate.onclick = () => {
+  valTwo = parseInt(display)
   const operators = {
     '+': add,
     '-': subtract,
@@ -56,7 +53,7 @@ evaluate.onclick = () => {
   const res = operators[symbol](valOne, valTwo)
 
   displayVal.textContent = res
-  emptyCalcArray()
+  display = ''
 }
 
 const clearBtn = document.querySelector('#itema')
