@@ -15,63 +15,75 @@ const divide = (x, y) => {
   return x / y
 }
 
-const operators = {
-  '+': add,
-  '-': subtract,
-  'x': multiply,
-  '÷': divide
-}
-// array
-// for loop (UPPERCASE)
-
-/* 2. Javascript step sequence:
-- onclick handlers for number buttons
-- onclick handlers for operator buttons
-- function to execute math functions using '=' button that gives result of:
-  initial value, operator, second value
-    -declare variables, pass around and modify them
-- display result of execute function
-- function to clear display using 'clear' button
-*/
-const displayVal = document.getElementById('displayVal')
-
-// Declare the variables we need
-let display = ''
-let valOne
-let valTwo
-let symbol
-
-const numClick = document.getElementsByClassName('btnNum')
-for (let arg of numClick) {
-  arg.addEventListener('click', () => {
-    display = display + arg.innerHTML
-    displayVal.innerHTML = display
-  })
+// 2. Create operate function that takes an operator and 2 numbers, the calls one of the math functions on the numbers
+const operate = (operator, num1, num2) => {
+  let result = 0
+  switch (operator) {
+    case '+': result = add(num1, num2)
+      break
+    case '-': result = subtract(num1, num2)
+      break
+    case 'x': result = multiply(num1, num2)
+      break
+    case '÷': result = divide(num1, num2)
+      break
+  }
+  return result
 }
 
-const operatorClick = document.getElementsByClassName('btnOperator')
-for (let arg of operatorClick) {
-  arg.addEventListener('click', () => {
-    valOne = display
-    symbol = arg.innerHTML
-    display = ''
-  })
-}
+// 3. Declare variables will be changed by our actions on the calculator
+let displayVal = ''
+let valOne // number passed into operator
+let valTwo // number after operator
+let symbol // operator calculator symbol
 
+// 4. Store buttons as variables that can be called later
+const display = document.getElementById('display')
+const numbers = document.getElementsByClassName('btnNum')
+const operators = document.getElementsByClassName('btnOperator')
 const evaluate = document.querySelector('#evaluate')
+const clearBtn = document.querySelector('#clear')
+
+// 5. Create functions for handling number, operator, evaluate and clear buttons
+
+// Number buttons event handler
+const numbersArr = Array.from(numbers) // convert numbers from nodelist to Array
+numbersArr.forEach((num) => {
+  num.addEventListener('click', () => {
+    // update display each time number is clicked
+    displayVal = displayVal + num.innerHTML
+    display.innerHTML = displayVal
+  })
+})
+
+// Operator buttons event handler
+const operatorArr = Array.from(operators)
+operatorArr.forEach((opr) => {
+  opr.addEventListener('click', () => {
+    valOne = displayVal
+    symbol = opr.innerHTML
+
+    // set display value to empty in order to recieve second value
+    displayVal = ''
+  })
+})
+
+// Evaluate button event handler
 evaluate.onclick = () => {
-  valTwo = display
+  valTwo = displayVal
 
-  // call operator function, passing in two values, and limiting decimals
-  const res = parseFloat(operators[symbol](valOne, valTwo)).toFixed(2)
+  // call operator function, passing in two values
+  const res = parseFloat(operate(symbol, valOne, valTwo)).toFixed(2)
 
-  // display the result of the operator function
-  displayVal.textContent = res
-  display = ''
+  // displayVal the result of the operator function
+  display.innerHTML = res
+
+  // set displayVal to empty after calculator evaluates two numbers
+  displayVal = ''
 }
 
-const clearBtn = document.querySelector('#clear')
+// Clear button event handler
 clearBtn.onclick = () => {
-  display = ''
-  displayVal.innerHTML = 0
+  displayVal = ''
+  display.innerHTML = 0
 }
