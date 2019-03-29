@@ -31,7 +31,7 @@ const operate = (operator, num1, num2) => {
   return result
 }
 
-// 3. Declare variables will be changed by our actions on the calculator
+// 3. Declare variables will be used in the calculator
 let displayVal = ''
 let valOne // number passed into operator
 let valTwo // number after operator
@@ -44,37 +44,42 @@ const operators = document.getElementsByClassName('btnOperator')
 const evaluate = document.querySelector('#evaluate')
 const clearBtn = document.querySelector('#clear')
 
-// 5. Create functions for handling number, operator, evaluate and clear buttons
+// 5. Create functions that update the display for the calculator using number, operator, evaluate and clear buttons
 
-// Number buttons event handler
-const numbersArr = Array.from(numbers) // convert numbers from nodelist to Array
+// Number buttons are displayed when clicked, and stored as variable
+// convert numbers from nodelist to Array
+const numbersArr = Array.from(numbers)
+
+// loop over all number buttons and attach event listeners to them
 numbersArr.forEach((num) => {
   num.addEventListener('click', () => {
-    // update display each time number is clicked
+    // update display when number is clicked
+    display.innerHTML = num.innerHTML
+    // update displayVal
     displayVal = num.innerHTML
-    display.innerHTML = displayVal
   })
 })
 
-// Operator buttons event handler
+// Operator buttons store operator symbol to be used in calculator
 const operatorArr = Array.from(operators)
+
+// loop over all operator buttons and attach event listener to them
 operatorArr.forEach((opr) => {
   opr.addEventListener('click', () => {
+    // set current display value to valOne
     valOne = displayVal
+    // set symbol to operator button's innerHTML value
     symbol = opr.innerHTML
-
     // set display value to empty in order to recieve second value
     displayVal = ''
   })
 })
 
-// Evaluate button event handler
+// Evaluate button uses operate function using two numbers and displays result
 evaluate.onclick = () => {
   valTwo = displayVal
-
-  // call operator function, passing in two values
+  // call operator function with operator symbol and two values
   const res = operate(symbol, valOne, valTwo)
-
   // displayVal the result of the operator function
   display.innerHTML = res
   console.log(`Calculate: ${valOne} + ${valTwo} = ${res}`)
