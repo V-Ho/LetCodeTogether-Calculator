@@ -51,7 +51,7 @@ const numbersArr = Array.from(numbers) // convert numbers from nodelist to Array
 numbersArr.forEach((num) => {
   num.addEventListener('click', () => {
     // update display each time number is clicked
-    displayVal = displayVal + num.innerHTML
+    displayVal = num.innerHTML
     display.innerHTML = displayVal
   })
 })
@@ -73,10 +73,11 @@ evaluate.onclick = () => {
   valTwo = displayVal
 
   // call operator function, passing in two values
-  const res = parseFloat(operate(symbol, valOne, valTwo)).toFixed(2)
+  const res = operate(symbol, valOne, valTwo)
 
   // displayVal the result of the operator function
   display.innerHTML = res
+  console.log(`Calculate: ${valOne} + ${valTwo} = ${res}`)
 
   // set displayVal to empty after calculator evaluates two numbers
   displayVal = ''
@@ -87,3 +88,9 @@ clearBtn.onclick = () => {
   displayVal = ''
   display.innerHTML = 0
 }
+
+/* Next steps:
+- Limit decimals to 2
+- Make +/- button work (convert to positive/negative)
+- Calulate numbers greater than 1 digit
+*/
